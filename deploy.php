@@ -6,8 +6,8 @@ include_once 'vendor/ekandreas/valet-deploy/recipe.php';
 set('domain','slk.app');
 
 server( 'production', 'www.skolporten.se', 22 )
-    ->env('deploy_path','/mnt/persist/www/slk.skolporten.se')
-    ->user( 'root' )
+    ->env('deploy_path','/mnt/persist/www/skolansledarkonvent.se')
+    ->user( 'root' )    
     ->env('branch', 'master')
     ->stage('production')
     ->env('database','slk')
