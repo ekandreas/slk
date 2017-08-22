@@ -1,18 +1,17 @@
 <?php
+namespace Deployer;
+
 date_default_timezone_set('Europe/Stockholm');
 
-include_once 'vendor/ekandreas/valet-deploy/recipe.php';
+include_once 'vendor/deployer/deployer/recipe/composer.php';
 
-set('domain','slk.app');
-
-server( 'production', 'www.skolporten.se', 22 )
+host('www.skolporten.se')
+    ->port(22)
     ->env('deploy_path','/mnt/persist/www/skolansledarkonvent.se')
-    ->user( 'root' )    
+    ->user('root')
     ->env('branch', 'master')
     ->stage('production')
-    ->env('database','slk')
-    ->env('domain','slk.skolporten.se')
-    ->identityFile();
+    ->identityFile('~/.ssh/id_rsa');
 
 set('repository', 'https://github.com/ekandreas/slk');
 
@@ -29,15 +28,31 @@ task('deploy:restart', function () {
     // run("rm -f web/app/uploads/.cache/*");
 })->desc('Refresh cache');
 
-task( 'deploy', [
-    'deploy:prepare',
-    'deploy:release',
-    'deploy:update_code',
-    'deploy:vendors',
-    'deploy:shared',
-    'deploy:writable',
-    'deploy:symlink',
-    'cleanup',
-    'deploy:restart',
-    'success'
-] )->desc( 'Deploy your Bedrock project, eg dep deploy production' );
+task('pull', function () {
+
+    $host = Context::get()->getHost();
+    $user = $host->getUser();
+    $hostname = $host->getHostname();
+    $localHostname = "slk.app";
+
+    $actions = [
+        //"ssh {$user}@{$hostname} 'cd {{deploy_path}}/current && wp db export - --allow-root | gzip' > db.sql.gz",
+        "ssh {$user}@{$hostname} 'cd {{deploy_path}}/current && mysqldump --skip-lock-tables --hex-blob --single-transaction skolporten | gzip' > db.sql.gz",
+        "gzip -df db.sql.gz",
+        "wp db import db.sql",
+        "rm -f db.sql",
+        "wp search-replace 'www.{$hostname}' '{$localHostname}'",
+        "wp search-replace '{$hostname}' '{$localHostname}'",
+        "wp search-replace 'https://{$localHostname}' 'http://{$localHostname}'",
+        "rsync --exclude .cache -rve ssh " .
+        "{$user}@{$hostname}:{{deploy_path}}/shared/web/app/uploads web/app",
+        //"wp plugin activate query-monitor",
+        "wp rewrite flush",
+        "wp cache flush"
+    ];
+
+    foreach ($actions as $action) {
+        writeln("{$action}");
+        writeln(runLocally($action));
+    }
+});

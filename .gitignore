@@ -1,7 +1,6 @@
 # Application
 web/app/plugins/*
 !web/app/plugins/.gitkeep
-!web/app/plugins/gravityforms
 web/app/mu-plugins/*/
 web/app/upgrade
 web/app/uploads/*
@@ -30,3 +29,5 @@ node_modules
 # Vagrant
 bin
 .vagrant
+
+.idea
