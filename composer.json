@@ -14,7 +14,7 @@
       "type": "package",
       "package": {
         "name": "wp-premium/gravityforms",
-        "version": "2.2.2.1",
+        "version": "2.2.3",
         "type": "wordpress-plugin",
         "dist": {
           "type": "zip",
@@ -30,6 +30,7 @@
     "johnpbloch/wordpress": "*",
     "oscarotero/env": "*",
     "roots/wp-password-bcrypt": "*",
+    "wp-premium/gravityforms": "*",
     "wpackagist-plugin/autodescription": "*"
   },
   "require-dev": {

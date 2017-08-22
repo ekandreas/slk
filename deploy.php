@@ -1,15 +1,17 @@
 <?php
 namespace Deployer;
 
+use Deployer\Task\Context;
+
 date_default_timezone_set('Europe/Stockholm');
 
 include_once 'vendor/deployer/deployer/recipe/composer.php';
 
-host('www.skolporten.se')
+host('skolporten.se')
     ->port(22)
-    ->env('deploy_path','/mnt/persist/www/skolansledarkonvent.se')
+    ->set('deploy_path','/mnt/persist/www/skolansledarkonvent.se')
     ->user('root')
-    ->env('branch', 'master')
+    ->set('branch', 'master')
     ->stage('production')
     ->identityFile('~/.ssh/id_rsa');
 
@@ -37,7 +39,7 @@ task('pull', function () {
 
     $actions = [
         //"ssh {$user}@{$hostname} 'cd {{deploy_path}}/current && wp db export - --allow-root | gzip' > db.sql.gz",
-        "ssh {$user}@{$hostname} 'cd {{deploy_path}}/current && mysqldump --skip-lock-tables --hex-blob --single-transaction skolporten | gzip' > db.sql.gz",
+        "ssh {$user}@{$hostname} 'cd {{deploy_path}}/current && mysqldump --skip-lock-tables --hex-blob --single-transaction slk | gzip' > db.sql.gz",
         "gzip -df db.sql.gz",
         "wp db import db.sql",
         "rm -f db.sql",
