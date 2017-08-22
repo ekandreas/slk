@@ -31,6 +31,7 @@
     "oscarotero/env": "*",
     "roots/wp-password-bcrypt": "*",
     "wp-premium/gravityforms": "*",
+    "wpackagist-plugin/varnish-http-purge": "*",
     "wpackagist-plugin/autodescription": "*"
   },
   "require-dev": {
