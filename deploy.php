@@ -58,3 +58,19 @@ task('pull', function () {
         writeln(runLocally($action));
     }
 });
+
+task('deploy:restart', function () {
+    $commands = [
+        "service apache2 restart",
+        "service redis restart",
+        "php -r 'opcache_reset();'",
+        "service varnish restart",
+    ];
+    foreach ($commands as $command) {
+        writeln($command);
+        writeln(run($command));
+    }
+})
+    ->desc('Restarting apache2 and varnish');
+after('deploy', 'deploy:restart');
+
