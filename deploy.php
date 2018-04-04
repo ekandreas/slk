@@ -61,10 +61,10 @@ task('pull', function () {
 
 task('deploy:restart', function () {
     $commands = [
-        "service apache2 restart",
+        "service nginx reload",
+        "service php7.0-fpm restart",
         "service redis restart",
         "php -r 'opcache_reset();'",
-        "service varnish restart",
     ];
     foreach ($commands as $command) {
         writeln($command);

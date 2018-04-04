@@ -3,7 +3,10 @@
   "type": "project",
   "description": "Bedrock with Divi",
   "config": {
-    "preferred-install": "dist"
+    "preferred-install": "dist",
+    "platform": {
+      "php": "7.1"
+    }
   },
   "repositories": [
     {
@@ -14,7 +17,7 @@
       "type": "package",
       "package": {
         "name": "wp-premium/gravityforms",
-        "version": "2.2.3",
+        "version": "2.2.6",
         "type": "wordpress-plugin",
         "dist": {
           "type": "zip",
@@ -25,13 +28,12 @@
   ],
   "require": {
     "php": ">=7",
-    "composer/installers": "~1.0.12",
+    "composer/installers": "*",
     "vlucas/phpdotenv": "*",
     "johnpbloch/wordpress": "*",
     "oscarotero/env": "*",
     "roots/wp-password-bcrypt": "*",
     "wp-premium/gravityforms": "*",
-    "wpackagist-plugin/varnish-http-purge": "*",
     "wpackagist-plugin/autodescription": "*"
   },
   "require-dev": {
