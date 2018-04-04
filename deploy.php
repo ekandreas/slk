@@ -1,15 +1,14 @@
 <?php
+
 namespace Deployer;
 
 use Deployer\Task\Context;
 
-date_default_timezone_set('Europe/Stockholm');
-
-include_once 'vendor/deployer/deployer/recipe/composer.php';
+include_once __DIR__ . '/vendor/deployer/deployer/recipe/composer.php';
 
 host('skolporten.se')
     ->port(22)
-    ->set('deploy_path','/mnt/persist/www/skolansledarkonvent.se')
+    ->set('deploy_path', '/mnt/persist/www/skolansledarkonvent.se')
     ->user('root')
     ->set('branch', 'master')
     ->stage('production')
@@ -18,17 +17,11 @@ host('skolporten.se')
 set('repository', 'https://github.com/ekandreas/slk');
 
 // Symlink the .env file for Bedrock
-set('env', 'prod');
 set('keep_releases', 10);
 set('shared_dirs', ['web/app/uploads']);
 set('shared_files', ['.env', 'web/.htaccess', 'web/robots.txt']);
 set('env_vars', '/usr/bin/env');
 set('writable_dirs', ['web/app/uploads']);
-
-task('deploy:restart', function () {
-    // Bladerunner example: 
-    // run("rm -f web/app/uploads/.cache/*");
-})->desc('Refresh cache');
 
 task('pull', function () {
 
@@ -71,6 +64,6 @@ task('deploy:restart', function () {
         writeln(run($command));
     }
 })
-    ->desc('Restarting apache2 and varnish');
+    ->desc('Restarting webservices');
 after('deploy', 'deploy:restart');
 
